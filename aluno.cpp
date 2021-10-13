@@ -17,7 +17,7 @@ string Aluno::getId(){ return id; }
 string Aluno::getNome(){ return nome; }
 string Aluno::getCursoId(){ return curso_id; }
 
-string Aluno::getNomeDoCurso(pqxx::work &wrk)
+string Aluno::selectNomeDoCurso(pqxx::work &wrk)
 {
     pqxx::result nomeDoCurso = wrk.exec(
         "SELECT nome\
@@ -28,19 +28,138 @@ string Aluno::getNomeDoCurso(pqxx::work &wrk)
     return to_string(nomeDoCurso[0][0]);
 }
 
-pqxx::result Aluno::getGrade()
+pqxx::result Aluno::selectGrade(pqxx::work &wrk)
 {
-    //Abre Conexão com o Banco de Dados
-    Postgres postgres;
-    pqxx::connection con(postgres.getConnection_str().c_str());
-    pqxx::work wrk(con);
-    
+    pqxx::result grade = wrk.exec(
+        "SELECT B.periodo, A.id, A.nome, B.pre_requisitos[1], B.pre_requisitos[2]\
+        FROM disciplinas A\
+        INNER JOIN grades B\
+        ON B.disciplina_id = A.id\
+        WHERE B.curso_id = '" + getCursoId() + "'\
+        ORDER BY periodo ASC"
+    );
 
-
-    //Fecha Conexão com o BD
-    con.disconnect();
+    return grade;
 }
 
+pqxx::result Aluno::selectPeriodosDoCurso(pqxx::work &wrk)
+{
+    pqxx::result periodos = wrk.exec(
+        "SELECT DISTINCT periodo\
+        FROM grades\
+        ORDER BY periodo ASC"
+    );
+
+    return periodos;
+}
+
+pqxx::result Aluno::selectTurmasDisponiveis(pqxx::work &wrk)
+{
+    pqxx::result turmas = wrk.exec(
+        "WITH\
+        gradeDoCurso AS\
+        (\
+            SELECT disciplina_id, pre_requisitos[1] AS p1, pre_requisitos[2] AS p2, periodo\
+            FROM grades\
+            WHERE curso_id = '" + getCursoId() + "'\
+        ),\
+        historicoDoAluno AS\
+        (\
+            SELECT disciplina_id\
+            FROM historico\
+            WHERE aluno_id = " + getId() + "\
+        ),\
+        gradeMenosHistorico AS\
+        (\
+            SELECT A.disciplina_id, A.p1, A.p2, A.periodo\
+            FROM gradeDoCurso A\
+            FULL OUTER JOIN historicoDoAluno B\
+            ON A.disciplina_id = B.disciplina_id\
+            WHERE B.disciplina_id IS NULL\
+        ),\
+        gradeMenosHistoricoMenosP1 AS\
+        (\
+            SELECT A.disciplina_id, A.p1, A.p2, A.periodo\
+            FROM gradeMenosHistorico A\
+            FULL OUTER JOIN historicoDoAluno B\
+            ON A.p1 = B.disciplina_id\
+            WHERE\
+                (B.disciplina_id IS NOT NULL OR A.p1 IS NULL)\
+            AND\
+                A.disciplina_id IS NOT NULL\
+        ),\
+        gradeMenosHistoricoMenosP2 AS\
+        (\
+            SELECT A.disciplina_id, A.p1, A.p2, A.periodo\
+            FROM gradeMenosHistoricoMenosP1 A\
+            FULL OUTER JOIN historicoDoAluno B\
+            ON A.p2 = B.disciplina_id\
+            WHERE\
+                (B.disciplina_id IS NOT NULL OR A.p2 IS NULL)\
+            AND\
+                A.disciplina_id IS NOT NULL\
+        )\
+        SELECT A.periodo, A.disciplina_id, B.descricao, B.vagas, B.id\
+        FROM gradeMenosHistoricoMenosP2 A\
+        INNER JOIN turmas B\
+        ON A.disciplina_id = B.disciplina_id\
+        ORDER BY A.periodo ASC, B.descricao"
+    );
+
+    return turmas;
+}
+
+void Aluno::insertInscricoes(pqxx::work &wrk, string values)
+{
+    pqxx::result inscricoes = wrk.exec(
+        "INSERT INTO inscricoes\
+        (aluno_id, turma_id, timestamp)\
+        VALUES"
+            + values + 
+        "ON CONFLICT (aluno_id, turma_id)\
+        DO NOTHING;"
+    );
+}
+
+pqxx::result Aluno::selectInscricoes(pqxx::work &wrk)
+{
+    pqxx::result inscricoes = wrk.exec(
+        "SELECT DISTINCT A.disciplina_id, A.descricao, A.vagas, A.id, G.periodo\
+        FROM (\
+            SELECT T.disciplina_id, T.descricao, T.vagas, T.id\
+            FROM inscricoes I\
+            INNER JOIN turmas T\
+            ON I.turma_id = T.id\
+            WHERE I.aluno_id = " + getId() +  
+        ") A\
+        INNER JOIN grades G\
+        ON A.disciplina_id = G.disciplina_id\
+        WHERE G.curso_id = '" + getCursoId() + "'\
+        ORDER BY G.periodo ASC, A.descricao"
+    );
+
+    return inscricoes;
+}
+
+pqxx::result Aluno::selectPeriodosDasInscricoes(pqxx::work &wrk)
+{
+     pqxx::result periodos = wrk.exec(
+        "SELECT DISTINCT G.periodo\
+        FROM (\
+            SELECT T.disciplina_id, T.descricao, T.vagas, T.id\
+            FROM inscricoes I\
+            INNER JOIN turmas T\
+            ON I.turma_id = T.id\
+            WHERE I.aluno_id = " + getId() + 
+        ") A\
+        INNER JOIN grades G\
+        ON A.disciplina_id = G.disciplina_id\
+        WHERE G.curso_id = '" + getCursoId() + "'\
+        ORDER BY G.periodo ASC"
+    );
+
+    return periodos;
+}
 
 int Aluno::printGrade()
 {
@@ -50,20 +169,9 @@ int Aluno::printGrade()
     pqxx::work wrk(con);
     
     //PRINT GRADE
-    string nomeDoCurso = getNomeDoCurso(wrk);
-    pqxx::result grade = wrk.exec(
-        "SELECT B.periodo, A.id, A.nome, B.pre_requisitos[1], B.pre_requisitos[2]\
-        FROM disciplinas A\
-        INNER JOIN grades B\
-        ON B.disciplina_id = A.id\
-        WHERE B.curso_id = '" + curso_id + "'\
-        ORDER BY periodo ASC"
-    );
-    pqxx::result periodos = wrk.exec(
-        "SELECT DISTINCT periodo\
-        FROM grades\
-        ORDER BY periodo asc"
-    );
+    string nomeDoCurso = selectNomeDoCurso(wrk);
+    pqxx::result grade = selectGrade(wrk);
+    pqxx::result periodos = selectPeriodosDoCurso(wrk);
     
     //Fecha Conexão com o BD
     con.disconnect();
@@ -126,63 +234,18 @@ int Aluno::printGrade()
 
 int Aluno::printTurmasDisponiveis()
 {
+    //Abre Conexão com o BD
     Postgres postgres;
     pqxx::connection con(postgres.getConnection_str().c_str());
     pqxx::work wrk(con);
     
-    //Cria Tabelas Auxiliares Temporárias
-
-    pqxx::result turmas = wrk.exec(
-        "WITH\
-        gradeDoCurso AS\
-        (\
-            SELECT disciplina_id, pre_requisitos[1] AS p1, pre_requisitos[2] AS p2, periodo\
-            FROM grades\
-            WHERE curso_id = '" + curso_id + "'\
-        ),\
-        historicoDoAluno AS\
-        (\
-            SELECT disciplina_id\
-            FROM historico\
-            WHERE aluno_id = " + id + "\
-        ),\
-        gradeMenosHistorico AS\
-        (\
-            SELECT A.disciplina_id, A.p1, A.p2, A.periodo\
-            FROM gradeDoCurso A\
-            FULL OUTER JOIN historicoDoAluno B\
-            ON A.disciplina_id = B.disciplina_id\
-            WHERE B.disciplina_id IS NULL\
-        ),\
-        gradeMenosHistoricoMenosP1 AS\
-        (\
-            SELECT A.disciplina_id, A.p1, A.p2, A.periodo\
-            FROM gradeMenosHistorico A\
-            FULL OUTER JOIN historicoDoAluno B\
-            ON A.p1 = B.disciplina_id\
-            WHERE\
-                (B.disciplina_id IS NOT NULL OR A.p1 IS NULL)\
-            AND\
-                A.disciplina_id IS NOT NULL\
-        ),\
-        gradeMenosHistoricoMenosP2 AS\
-        (\
-            SELECT A.disciplina_id, A.p1, A.p2, A.periodo\
-            FROM gradeMenosHistoricoMenosP1 A\
-            FULL OUTER JOIN historicoDoAluno B\
-            ON A.p2 = B.disciplina_id\
-            WHERE\
-                (B.disciplina_id IS NOT NULL OR A.p2 IS NULL)\
-            AND\
-                A.disciplina_id IS NOT NULL\
-        )\
-        SELECT A.periodo, A.disciplina_id, B.descricao, B.vagas, B.id\
-        FROM gradeMenosHistoricoMenosP2 A\
-        INNER JOIN turmas B\
-        ON A.disciplina_id = B.disciplina_id\
-        ORDER BY A.periodo ASC, B.descricao"
-    );
+    //Realiza requirementos ao BD
+    pqxx::result turmas = selectTurmasDisponiveis(wrk);
     
+    //Fecha conxeão com o BD
+    con.disconnect();
+
+    //Começa lógica de Impressão
     if (turmas.size() < 1)
     {
         cout << "Tabela vazia ou erro (turmas)" << endl;
@@ -220,6 +283,8 @@ int Aluno::printTurmasDisponiveis()
     };
     cout << endl;
 
+   return 0;
+   
     /* Template:
     +--------------------------------------------------------------------------+
     |                           Turmas Disponíveis                             |
@@ -238,28 +303,30 @@ int Aluno::printTurmasDisponiveis()
     | MAC238 | Cálculo III - A                                    |   4   | 1  |
     | MAC238 | Cálculo III - B                                    |   5   | 1  |
     +--------|----------------------------------------------------+-------+----+
-
     */
-    //Fecha Conexão com o BD
-    con.disconnect();
-   
-   return 0;
 }
 
 int Aluno::fazerInscricoes(string turmas_id)
 {
+    //Trata turmas_id vazio
+    if (turmas_id.size() < 1)
+    {
+        cout << "Nenhuma turma foi selecionada" << endl;
+        
+        return 1;
+    }
+
     //Abre conexão com o Banco de dados
     Postgres postgres;
     pqxx::connection con(postgres.getConnection_str().c_str());
     pqxx::work wrk(con);
-
-    //Retorna caso o vetor de turmas esteja vazio
-    if (turmas_id.size() < 1)
-    {
-        cout << "Nenhuma turma foi selecionada" << endl;
-        return 1;
-    }
     
+    //Requere turmas disponíveis
+    pqxx::result turmas = selectTurmasDisponiveis(wrk);
+
+    //Fecha Conxeão com o BD
+    con.disconnect();
+
     //Define timestamp 19:79:55
     time_t now = time(0);
     tm *ltm = localtime(&now);
@@ -270,58 +337,6 @@ int Aluno::fazerInscricoes(string turmas_id)
     string min = to_string(ltm->tm_min);
     string sec = to_string(ltm->tm_sec);
     string timestamp = year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;
-
-    //Requere turmas disponíveis
-    pqxx::result turmas = wrk.exec(
-        "WITH\
-        gradeDoCurso AS\
-        (\
-            SELECT disciplina_id, pre_requisitos[1] AS p1, pre_requisitos[2] AS p2, periodo\
-            FROM grades\
-            WHERE curso_id = '" + curso_id + "'\
-        ),\
-        historicoDoAluno AS\
-        (\
-            SELECT disciplina_id\
-            FROM historico\
-            WHERE aluno_id = " + id + "\
-        ),\
-        gradeMenosHistorico AS\
-        (\
-            SELECT A.disciplina_id, A.p1, A.p2, A.periodo\
-            FROM gradeDoCurso A\
-            FULL OUTER JOIN historicoDoAluno B\
-            ON A.disciplina_id = B.disciplina_id\
-            WHERE B.disciplina_id IS NULL\
-        ),\
-        gradeMenosHistoricoMenosP1 AS\
-        (\
-            SELECT A.disciplina_id, A.p1, A.p2, A.periodo\
-            FROM gradeMenosHistorico A\
-            FULL OUTER JOIN historicoDoAluno B\
-            ON A.p1 = B.disciplina_id\
-            WHERE\
-                (B.disciplina_id IS NOT NULL OR A.p1 IS NULL)\
-            AND\
-                A.disciplina_id IS NOT NULL\
-        ),\
-        gradeMenosHistoricoMenosP2 AS\
-        (\
-            SELECT A.disciplina_id, A.p1, A.p2, A.periodo\
-            FROM gradeMenosHistoricoMenosP1 A\
-            FULL OUTER JOIN historicoDoAluno B\
-            ON A.p2 = B.disciplina_id\
-            WHERE\
-                (B.disciplina_id IS NOT NULL OR A.p2 IS NULL)\
-            AND\
-                A.disciplina_id IS NOT NULL\
-        )\
-        SELECT A.periodo, A.disciplina_id, B.descricao, B.vagas, B.id\
-        FROM gradeMenosHistoricoMenosP2 A\
-        INNER JOIN turmas B\
-        ON A.disciplina_id = B.disciplina_id\
-        ORDER BY A.periodo ASC, B.descricao"
-    );
 
     //cria um VALUE para cada ID enquanto também os valida
     string values;
@@ -351,19 +366,8 @@ int Aluno::fazerInscricoes(string turmas_id)
     }
     values += "(" + id + ", '" + word + "', '" + timestamp + "')"; //ultima palavra
 
-    cout << values << endl;
-
-    
-
     //Faz INSERT das inscrições tratando repetições
-    pqxx::result inscricoes = wrk.exec(
-        "INSERT INTO inscricoes\
-        (aluno_id, turma_id, timestamp)\
-        VALUES"
-         + values + 
-        "ON CONFLICT (aluno_id, turma_id)\
-        DO NOTHING;"
-    );
+    insertInscricoes(wrk, values);
        
     //Salva alterações no Banco de Dados
     wrk.commit();
@@ -381,20 +385,7 @@ int Aluno::printInscricoes()
     pqxx::work wrk(con);
 
     //Realiza Requisição ao BD
-    pqxx::result inscricoes = wrk.exec(
-        "SELECT DISTINCT A.disciplina_id, A.descricao, A.vagas, A.id, G.periodo\
-        FROM (\
-            SELECT T.disciplina_id, T.descricao, T.vagas, T.id\
-            FROM inscricoes I\
-            INNER JOIN turmas T\
-            ON I.turma_id = T.id\
-            WHERE I.aluno_id = " + id +  
-        ") A\
-        INNER JOIN grades G\
-        ON A.disciplina_id = G.disciplina_id\
-        WHERE G.curso_id = '" + curso_id + "'\
-        ORDER BY G.periodo ASC, A.descricao"
-    );
+    pqxx::result inscricoes = selectInscricoes(wrk);
 
     //Trata Resposta vazia
     if (inscricoes.size() < 1)
@@ -403,20 +394,8 @@ int Aluno::printInscricoes()
         return -1;
     };
     
-    pqxx::result periodos = wrk.exec(
-        "SELECT DISTINCT G.periodo\
-        FROM (\
-            SELECT T.disciplina_id, T.descricao, T.vagas, T.id\
-            FROM inscricoes I\
-            INNER JOIN turmas T\
-            ON I.turma_id = T.id\
-            WHERE I.aluno_id = " + id + 
-        ") A\
-        INNER JOIN grades G\
-        ON A.disciplina_id = G.disciplina_id\
-        WHERE G.curso_id = '" + curso_id + "'\
-        ORDER BY G.periodo ASC"
-    );
+    //Realiza Requisição ao BD
+    pqxx::result periodos = selectPeriodosDasInscricoes(wrk);
 
     //Trata Resposta vazia
     if (periodos.size() < 1)
@@ -425,12 +404,14 @@ int Aluno::printInscricoes()
         return -1;
     };
     
+    //Fecha conexão com BD
+    con.disconnect();
+    
     //CABEÇALHO
     cout << "+--------------------------------------------------------------------------+\n"
          << "|                               Inscrições                                 |\n"
          << "+--------------------------------------------------------------------------+\n";
     
-    //grade[row][column]
     //PERIODO
     int row = 0;
     //cout << periodos.size() << endl;
@@ -450,9 +431,6 @@ int Aluno::printInscricoes()
         }
         cout << "+--------+----------------------------------------------------+-------+----+\n";
     };
-
-    //Fecha Conexão com o Banco de dados
-    con.disconnect();
 
     return 0;
 }
@@ -499,3 +477,4 @@ int Aluno::cancelarInscricoes(string turma_ids)
 
     return 0;
 }
+

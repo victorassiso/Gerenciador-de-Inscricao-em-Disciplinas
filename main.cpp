@@ -146,6 +146,7 @@ int main ()
 
 /*TO DO
 Primários:
+    -Separar requisições ao banco
     -nao permitir se inscrever em turmas nao disponíveis (Por pŕe-requisitos e por vagas)
 Secundários:
     -Printar Pré-requisitos
