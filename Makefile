@@ -2,7 +2,7 @@
 EXE				:= proj #Nome do executável
 CC				:= g++ #Compilador
 MAIN_SRC	:= main.cpp
-H_SRC			:=  postgres.h aluno.h #Adicionar arquivos .h aqui
+H_SRC			:=  postgres.h aluno.h requerimento.h gerenciamento.h#Adicionar arquivos .h aqui
 CFLAGS			:= -Wall -g 
 LDFLAGS			:= -lpqxx -lpq
 

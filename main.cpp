@@ -1,25 +1,19 @@
 //#include "aluno.h"
 #include "postgres.h"
-#include "aluno.h"
+#include "gerenciamento.h"
 #include <iomanip>
 #include <pqxx/pqxx>
 
-
+void pressioneEnterParaContinuar()
+{
+    cout << "Pressione ENTER para continuar...";
+    cin.ignore();
+    cin.get();
+    cout << endl;
+}
 
 int main ()
 {
-    /*
-    Aluno alunoEEL1("1");
-    Aluno alunoEEL2("2");
-    Aluno alunoEEL3("3");
-    Aluno alunoEEL4("4");
-    Aluno alunoEEL5("5");
-    Aluno alunoCOS6("6");
-    Aluno alunoCOS7("7");
-    Aluno alunoCOS8("8");
-    Aluno alunoCOS9("9");
-    Aluno alunoCOS10("10");
-    */
 
     int opcao = 0;
     int login = 0;
@@ -58,7 +52,7 @@ int main ()
             }
         }
 
-        Aluno aluno(to_string(login));
+        Gerenciamento aluno(to_string(login));
 
         //Menu Principal
         opcao = 0;
@@ -83,32 +77,26 @@ int main ()
             case 7: //Sair
                 break;
             case 6: //Trocar de Aluno
+                aluno.~Gerenciamento();
                 login = 0;
                 break;
             case 1:
                 aluno.printGrade();
-                cout << "Aperte 'ENTER' para continuar..";
-                cin.ignore();
-                cin.get();
+                pressioneEnterParaContinuar();
                 break;
             case 2:
                 aluno.printTurmasDisponiveis();
-                cout << "Aperte 'ENTER' para continuar...";
-                cin.ignore();
-                cin.get();
+                pressioneEnterParaContinuar();
                 break;
             case 3:
                 aluno.printInscricoes();
-                cout << "Aperte 'ENTER' para continuar...";
-                cin.ignore();
-                cin.get();
+                pressioneEnterParaContinuar();
                 break;
             case 4:
                 while (confirmacao != "s" && confirmacao != "S" && confirmacao != "n" && confirmacao != "N")
                 {
                     cout << "Obs.: Deseja, antes, imprimir a tabela de turmas disponíveis? [S/N]:";
-                    cin >> confirmacao;
-                    cin.ignore();
+                    pressioneEnterParaContinuar();
                 }
                 if (confirmacao == "s" || confirmacao == "S")
                 {
@@ -124,8 +112,7 @@ int main ()
                 while (confirmacao != "s" && confirmacao != "S" && confirmacao != "n" && confirmacao != "N")
                 {
                     cout << "Obs.: Deseja, antes, imprimir suas inscrições? [S/N]:";
-                    cin >> confirmacao;
-                    cin.ignore();
+                    pressioneEnterParaContinuar();
                 }
                 if (confirmacao == "s" || confirmacao == "S")
                 {
@@ -146,10 +133,9 @@ int main ()
 
 /*TO DO
 Primários:
-    -Separar requisições ao banco
+    -Abrir e Fechar conexão com o BD no construtor e destrutor
     -nao permitir se inscrever em turmas nao disponíveis (Por pŕe-requisitos e por vagas)
 Secundários:
-    -Printar Pré-requisitos
     -Trocar Vagas por Inscrições/Vagas 1/1 (transmormar em dinâmico)
     -Mensagem de confirmação (cancelarInscrições)
     -Inscrever outros alunos em turmas, mais exemplos prontos
@@ -158,14 +144,4 @@ Secundários:
         (buscas nao encontradas)
 Revisar:
     -Query printGrade() (muito grande)
-
-Turmas Disponiveis:
-    9:
-        COE241
-        COS242
-        COS471
-        FIM240
-        FIN241
-        IQG111
-        MAC248
 */
