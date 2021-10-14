@@ -16,15 +16,18 @@ Aluno::Aluno(string aluno_id)
         id = to_string(aluno[0][0]);
         nome = to_string(aluno[0][1]);
         curso_id = to_string(aluno[0][2]);
+        
+        cout << "-Log: Aluno criado!" << endl;
     }
     catch (exception const &e)
     {
         std::cerr << e.what() << std::endl;
+        cout << "ERRO: Falha no Login!" << endl;
         id = "-1";
     }
 }
 
-Aluno::~Aluno(){ cout << "Aluno destruído" << endl; }
+Aluno::~Aluno(){ cout << "-Log: Aluno destruído!" << endl; }
 
 string Aluno::getId(){ return id; }
 

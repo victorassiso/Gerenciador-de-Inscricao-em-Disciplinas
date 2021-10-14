@@ -1,7 +1,14 @@
 #include "requisicao.h"
 
-Requerimento::Requerimento(string aluno_id): Aluno(aluno_id) {}
-Requerimento::~Requerimento() { cout << "Requerimento Destruído" << endl; }
+Requerimento::Requerimento(string aluno_id): Aluno(aluno_id)
+{
+    cout << "-Log: Requerimento criado!" << endl;
+}
+
+Requerimento::~Requerimento()
+{
+    cout << "-Log: Requerimento destruído!" << endl;
+}
 
 string Requerimento::selectNomeDoCurso(pqxx::work &wrk)
 {

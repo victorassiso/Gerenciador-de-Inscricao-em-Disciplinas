@@ -14,6 +14,8 @@ Postgres::Postgres(string hst, string prt, string db, string usr, string pw)
         " dbname=" + db +
         " user=" + usr +
         " password=" + pw);
+
+    cout << "-Log: Postgres criado!" << endl;
 }
 
 Postgres::Postgres()
@@ -30,9 +32,11 @@ Postgres::Postgres()
         " dbname=" + dbname +
         " user=" + username +
         " password=" + password);
+
+    cout << "-Log: Postgres criado!" << endl;
 }
 
-Postgres::~Postgres() { cout << "Postgres Destruído" << endl; }
+Postgres::~Postgres() { cout << "-Log: Postgres destruído!" << endl; }
 string Postgres::getHost() { return host; }
 string Postgres::getPort() { return port; }
 string Postgres::getDBname() { return dbname; }

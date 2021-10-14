@@ -1,8 +1,14 @@
 #include "gerenciamento.h"
 
-Gerenciamento::Gerenciamento(string aluno_id): Requerimento(aluno_id) {}
+Gerenciamento::Gerenciamento(string aluno_id): Requerimento(aluno_id)
+{
+    cout << "-Log: Gerenciamento criado!" << endl;
+}
 
-Gerenciamento::~Gerenciamento() { cout << "Gerenciamento Destruído" << endl; }
+Gerenciamento::~Gerenciamento()
+{
+    cout << "-Log: Gerenciamento destruído!" << endl;
+}
 
 int Gerenciamento::printGrade()
 {   try
@@ -40,7 +46,7 @@ int Gerenciamento::printGrade()
         //Print CABEÇALHO (Nome do Curso)
         int larguraMaxima = 50;
         int laterais = larguraMaxima - (int)nomeDoCurso.size();
-        cout << nomeDoCurso.size() << endl;
+        
         cout << "+--------------------------------------------------------------------------+\n";
         if (laterais % 2 == 0)//Caso Par, divisão é igual
         {
