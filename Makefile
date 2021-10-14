@@ -2,8 +2,8 @@
 EXE				:= proj #Nome do executável
 CC				:= g++ #Compilador
 MAIN_SRC	:= main.cpp
-H_SRC			:=  postgres.h aluno.h requerimento.h gerenciamento.h#Adicionar arquivos .h aqui
-CFLAGS			:= -Wall -g 
+H_SRC			:=  menu.h postgres.h aluno.h requisicao.h gerenciamento.h#Adicionar arquivos .h aqui
+CFLAGS			:= -Wall -g -std=c++11
 LDFLAGS			:= -lpqxx -lpq
 
 #Define variável com arquivos .o

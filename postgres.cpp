@@ -31,6 +31,8 @@ Postgres::Postgres()
         " user=" + username +
         " password=" + password);
 }
+
+Postgres::~Postgres() { cout << "Postgres Destruído" << endl; }
 string Postgres::getHost() { return host; }
 string Postgres::getPort() { return port; }
 string Postgres::getDBname() { return dbname; }

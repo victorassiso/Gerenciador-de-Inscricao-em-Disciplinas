@@ -1,7 +1,7 @@
 #ifndef GERENCIAMENTO_H
 #define GERENCIAMENTO_H
 
-#include "requerimento.h"
+#include "requisicao.h"
 
 class Gerenciamento: public Requerimento
 {

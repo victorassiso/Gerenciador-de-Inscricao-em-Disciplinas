@@ -1,4 +1,4 @@
-#include "requerimento.h"
+#include "requisicao.h"
 
 Requerimento::Requerimento(string aluno_id): Aluno(aluno_id) {}
 Requerimento::~Requerimento() { cout << "Requerimento Destruído" << endl; }

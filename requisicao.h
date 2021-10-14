@@ -5,7 +5,7 @@
 
 class Requerimento: public Aluno
 {
-    public:
+    protected:
         Requerimento(string);
         ~Requerimento();
 

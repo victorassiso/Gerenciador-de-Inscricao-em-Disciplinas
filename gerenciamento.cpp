@@ -5,74 +5,111 @@ Gerenciamento::Gerenciamento(string aluno_id): Requerimento(aluno_id) {}
 Gerenciamento::~Gerenciamento() { cout << "Gerenciamento Destruído" << endl; }
 
 int Gerenciamento::printGrade()
-{
-    //Abre Conexão com o Banco de Dados
-    Postgres postgres;
-    pqxx::connection con(postgres.getConnection_str().c_str());
-    pqxx::work wrk(con);
-    
-    //PRINT GRADE
-    string nomeDoCurso = selectNomeDoCurso(wrk);
-    pqxx::result grade = selectGrade(wrk);
-    pqxx::result periodos = selectPeriodosDoCurso(wrk);
-    
-    //Fecha Conexão com o BD
-    con.disconnect();
+{   try
+    {
+        //Abre Conexão com o Banco de Dados
+        Postgres postgres;
+        pqxx::connection con(postgres.getConnection_str());
+        pqxx::work wrk(con);
+        
+        //PRINT GRADE
+        string nomeDoCurso = selectNomeDoCurso(wrk);
+        pqxx::result grade = selectGrade(wrk);
+        pqxx::result periodos = selectPeriodosDoCurso(wrk);
+        
+        //Fecha Conexão com o BD
+        con.disconnect();
 
-    if (grade.size() < 1)
-    {
-        cout << "Tabela vazia ou erro (grade)" << endl;
-        return -1;
-    };
-    if (nomeDoCurso.size() < 1)
-    {
-        cout << "Tabela vazia ou erro (curso)" << endl;
-        return -1;
-    };
-    if (periodos.size() < 1)
-    {
-        cout << "Tabela vazia ou erro (periodos)" << endl;
-        return -1;
-    };
-
-    //CABEÇALHO
-    int larguraMaxima = 50;
-    int laterais = larguraMaxima - (int)nomeDoCurso.size();
-    cout << "+--------------------------------------------------------------------------+\n";
-    if (laterais % 2 == 0)
-    {
-        cout << "| " << setw(laterais/2) << "" << "Curso de Graduação em " << nomeDoCurso << setw(laterais/2) << "" << " |\n";
-    } else {
-        cout << "| " << setw(laterais/2) << "" << "Curso de Graduação em " << nomeDoCurso << setw(laterais/2+1) << "" << " |\n";
-    };
-    cout << "+--------------------------------------------------------------------------+\n";
-    
-    //grade[row][column]
-    //PERIODO
-    int row = 0;
-    string requisitos;
-
-    for (int p = 0; p < (int)periodos.size(); p++)
-    {
-        cout << "|" << setw(32) << "" << periodos[p][0] << "º Período" << setw(32) << "" << "|\n";
-        cout << "+--------+------------------------------------------------+----------------+\n";
-        cout << "| Código | Nome                                           | Requisitos     |\n";
-        cout << "+--------+------------------------------------------------+----------------+\n";
-
-        //DISCIPLINAS
-        while (grade[row][0] == periodos[p][0])
+        //Trata Resultados Vazios
+        if (grade.size() < 1)
         {
-            requisitos = "";
-            grade[row][3].size() > 0 ? requisitos = to_string(grade[row][3]) : requisitos = "      ";
-            grade[row][4].size() > 0 ? requisitos += ", " + to_string(grade[row][4]) : requisitos += "        ";
-            cout << "| " << grade[row][1] << " | " << grade[row][2] << setw(46 - grade[row][2].size()) << "" << " | " << requisitos << " | " << endl;
-            row+=1;
-        }
-        cout << "+--------+------------------------------------------------+----------------+\n";
-    };
-    cout << endl;
+            cout << "Tabela vazia ou erro (grade)" << endl;
+            return -1;
+        };
+        if (nomeDoCurso.size() < 1)
+        {
+            cout << "Tabela vazia ou erro (curso)" << endl;
+            return -1;
+        };
+        if (periodos.size() < 1)
+        {
+            cout << "Tabela vazia ou erro (periodos)" << endl;
+            return -1;
+        };
+
+        //Print CABEÇALHO (Nome do Curso)
+        int larguraMaxima = 50;
+        int laterais = larguraMaxima - (int)nomeDoCurso.size();
+        cout << nomeDoCurso.size() << endl;
+        cout << "+--------------------------------------------------------------------------+\n";
+        if (laterais % 2 == 0)//Caso Par, divisão é igual
+        {
+            cout << "| " << setw(laterais/2) << "" << "Curso de Graduação em " << nomeDoCurso << setw(laterais/2) << "" << " |\n";
+        } else {//Caso Ímpar, a segunda metade é acrescida em 1
+            cout << "| " << setw(laterais/2) << "" << "Curso de Graduação em " << nomeDoCurso << setw(laterais/2+1) << "" << " |\n";
+        };
+        cout << "+--------------------------------------------------------------------------+\n";
+        
+        //Print PERIODO
+        int row = 0;
+        string requisitos;
+
+        for (int p = 0; p < (int)periodos.size(); p++)
+        {
+            cout << "|" << setw(32) << "" << periodos[p][0] << "º Período" << setw(32) << "" << "|\n";
+            cout << "+--------+------------------------------------------------+----------------+\n";
+            cout << "| Código | Nome                                           |   Requisitos   |\n";
+            cout << "+--------+------------------------------------------------+----------------+\n";
+
+            //Print DISCIPLINAS por período
+            while (grade[row][0] == periodos[p][0])
+            {
+                //Formata espaçamento da coluna dos Pré-requisitos
+                requisitos = "";
+                grade[row][3].size() > 0 ? requisitos = to_string(grade[row][3]) : requisitos = "      ";
+                grade[row][4].size() > 0 ? requisitos += ", " + to_string(grade[row][4]) : requisitos += "        ";
+                //Printa Linha (Row)
+                cout << "| "
+                     << grade[row][1] //Código
+                     << " | "
+                     << grade[row][2] //Nome
+                     << setw(46 - grade[row][2].size()) //Preenche espaço do nome
+                     << "" << " | "
+                     << requisitos //Requisitos
+                     << " | " << endl;
+                row+=1;
+            }
+            cout << "+--------+------------------------------------------------+----------------+\n";
+        };
+        cout << endl;
     
+    }
+    catch (std::exception const &e)
+    {
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
     return 0;
+
+    /* Template:
+    +--------------------------------------------------------------------------+
+    |       Curso de Graduação em Engenharia Eletrônica e de Computação        |
+    +--------------------------------------------------------------------------+
+    |                                1º Período                                |
+    +--------+------------------------------------------------+----------------+
+    | Código | Nome                                           |   Requisitos   |
+    +--------+------------------------------------------------+----------------+
+    | MAC238 | Cálculo III                                    | MAC128         |
+    | MAC238 | Física III                                     | FIT112, MAC128 |
+    +--------|------------------------------------------------+----------------+
+    |                                2º Período                                |
+    +--------+------------------------------------------------+----------------+
+    | Código | Turma                                          |   Requisitos   |
+    +--------+------------------------------------------------+----------------+
+    | MAC238 | Cálculo III                                    | MAC128         |
+    | MAC238 | Física III                                     | FIT112, MAC128 |
+    +--------|------------------------------------------------+----------------+
+    */
 }
 
 int Gerenciamento::printTurmasDisponiveis()
@@ -103,7 +140,7 @@ int Gerenciamento::printTurmasDisponiveis()
     //PERIODO
     int row = 0;
     auto periodoAtual = turmas[0][0].as<int>();//Menor período
-    auto periodoLimite = turmas[turmas.size()-1][0].as<int>();
+    auto periodoLimite = turmas[turmas.size()-1][0].as<int>();//Maior período
 
     while (row < turmas.size()-1)
     {
@@ -115,7 +152,17 @@ int Gerenciamento::printTurmasDisponiveis()
         //DISCIPLINAS
         while (row < turmas.size() && turmas[row][0].as<int>() == periodoAtual)
         {
-            cout << "| " << turmas[row][1] << " | " << turmas[row][2] << setw(50 - turmas[row][2].size()) << "" << " |   " << turmas[row][3] << "   | " << turmas[row][4] << setw(2- turmas[row][4].size()) << "" << " | "  << endl;
+            cout << "| "
+                 << turmas[row][1] //Código
+                 << " | "
+                 << turmas[row][2] //Descrição Turma
+                 << setw(50 - turmas[row][2].size()) //Preenche espaço da descrição
+                 << "" << " |   "
+                 << turmas[row][3] //Vagas
+                 << "   | "
+                 << turmas[row][4] //Id
+                 << setw(2- turmas[row][4].size()) //Preenche espaço no caso de números de apenas 1 algarismo
+                 << "" << " | "  << endl;
             row+=1;
         }
         cout << "+--------+----------------------------------------------------+-------+----+\n";

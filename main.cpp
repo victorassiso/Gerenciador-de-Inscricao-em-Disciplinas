@@ -17,6 +17,7 @@ int main ()
 
     int opcao = 0;
     int login = 0;
+    string login_str = "victor";
     string confirmacao = "x";
     string IDs;
 
@@ -45,14 +46,51 @@ int main ()
                  << endl;
 
             while (login < 1 || login > 10)
-            {
+            {   
+                /*
+                cout << "--antes do try--" << endl;
+                cout << "login_str: " << login_str << endl;
+                cout << "login: " << login << endl;
+                //getline(cin, login_str);
+                */
                 cout << "Aluno: ";
-                cin >> login;
-                cout << endl;
+                cout << login << endl;
+                //char a[8];
+                //cin.getline(a, 8);
+                if (!cin.good()){
+                    cout << "Bad" << endl;
+                    cin.clear();
+                    cin.ignore();
+                }
+                cin.ignore(3, '\n');
+
+
+                /*
+                cin.eof();
+                try
+                {
+                    cout << "--depois do try--" << endl;
+                    cout << "login_str: " << login_str << endl;
+                    cout << "login: " << login << endl;
+                    login = stoi(login_str);
+                    login_str = "assis";
+                    cout << "login_str: " << login_str << endl;
+                    cout << "login: " << login << endl;
+
+                }
+                catch (exception const &e)
+                {
+                    cout << "Erro: Entrada inválida! A entrada deve conter um número inteiro entre 1 e 10, mas contém caracteres alfabéticos." << endl;
+                }
+                */
             }
         }
-
-        Gerenciamento aluno(to_string(login));
+        
+        static Gerenciamento aluno(to_string(login));
+        if (aluno.getId() == "-1")
+        {
+            return 1;
+        }
 
         //Menu Principal
         opcao = 0;
@@ -75,6 +113,7 @@ int main ()
         switch (opcao)
         {
             case 7: //Sair
+                aluno.~Gerenciamento();
                 break;
             case 6: //Trocar de Aluno
                 aluno.~Gerenciamento();
@@ -96,7 +135,8 @@ int main ()
                 while (confirmacao != "s" && confirmacao != "S" && confirmacao != "n" && confirmacao != "N")
                 {
                     cout << "Obs.: Deseja, antes, imprimir a tabela de turmas disponíveis? [S/N]:";
-                    pressioneEnterParaContinuar();
+                    cin.ignore();
+                    cin >> confirmacao;
                 }
                 if (confirmacao == "s" || confirmacao == "S")
                 {
@@ -105,6 +145,7 @@ int main ()
                 }
                 cout << "Entre os IDs das turmas as quais deseja inscrever-se separados por espaço:" << endl;
                 cout << "IDs: ";
+                cin.ignore();
                 getline(cin, IDs);
                 aluno.fazerInscricoes(IDs);
                 break;
@@ -112,7 +153,8 @@ int main ()
                 while (confirmacao != "s" && confirmacao != "S" && confirmacao != "n" && confirmacao != "N")
                 {
                     cout << "Obs.: Deseja, antes, imprimir suas inscrições? [S/N]:";
-                    pressioneEnterParaContinuar();
+                    cin.ignore();
+                    cin >> confirmacao;
                 }
                 if (confirmacao == "s" || confirmacao == "S")
                 {
@@ -121,6 +163,7 @@ int main ()
                 }
                 cout << "Entre os IDs das turmas as quais deseja cancelar sua inscrição separados por espaço:" << endl;
                 cout << "IDs: ";
+                cin.ignore();
                 getline(cin, IDs);
                 aluno.cancelarInscricoes(IDs);
                 break;

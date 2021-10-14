@@ -13,15 +13,16 @@ using namespace std;
 
 class Aluno
 {
-    public:
+    protected:
         Aluno(string);
         ~Aluno();
 
+    public:
         string getId();
         string getNome();
         string getCursoId();
-
-    protected:
+        
+    private:
         string id;
         string nome;
         string curso_id;

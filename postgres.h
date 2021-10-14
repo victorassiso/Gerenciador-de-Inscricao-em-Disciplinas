@@ -11,6 +11,7 @@ class Postgres {
     public:
         Postgres();
         Postgres(string, string, string, string, string);
+        ~Postgres();
 
         string getHost();
         string getPort();
