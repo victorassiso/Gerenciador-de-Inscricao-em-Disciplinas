@@ -15,16 +15,16 @@ O programa consiste de:
 3. Um banco de dados SQL;
 
 <p align="center">
-<img src=".imgs/panorama.png" alt="Print do Menu Principal" style="width:700px;"/>
+<img src="imgs/panorama.png" alt="Print do Menu Principal" style="width:700px;"/>
 </p>
 
 ## Funcionalidades:
 <p align="center">
-<img src=".imgs/printMenuPrincipal.png" alt="Print do Menu Principal" style="width:400px;"/>
+<img src="imgs/printMenuPrincipal.png" alt="Print do Menu Principal" style="width:400px;"/>
 </p>
 
 * Exemplo de Grade
 
 <p align="center">
-<img src=".imgs/printGrade.png" alt="Print da Grade" style="width:700px;"/>
+<img src="imgs/printGrade.png" alt="Print da Grade" style="width:700px;"/>
 </p>

@@ -18,15 +18,6 @@ SELECT * FROM turmas;
 SELECT * FROM inscricoes;
 */
 
-DROP TABLE inscricoes;
-DROP TABLE turmas;
-DROP TABLE historico;
-DROP TABLE alunos;
-DROP TABLE grades;
-DROP TABLE semestres;
-DROP TABLE disciplinas;
-DROP TABLE cursos;
-
 --CREATE TABLE
 CREATE TABLE IF NOT EXISTS cursos (
     id VARCHAR(3) PRIMARY KEY UNIQUE NOT NULL,

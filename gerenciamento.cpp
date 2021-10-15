@@ -242,7 +242,7 @@ int Gerenciamento::fazerInscricoes(string turmas_id)
         vector<string> vetorIDsValidados;
         for (int i = 0; i < vetorIDs.size(); i++)
         {
-            if (!validaIDsNaTabela(turmas, 4, vetorIDs.at(i)))
+            if (!validaIDsNaTabela(turmas, 5, vetorIDs.at(i)))
             {
                 cout << "ERRO: O ID '" << vetorIDs.at(i)
                      << "' é inválido ou você não tem os requisitos necessários para se inscrever nessa turma"
