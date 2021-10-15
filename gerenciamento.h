@@ -15,6 +15,7 @@ class Gerenciamento: public Requerimento
         int printInscricoes();
         int cancelarInscricoes(string);
 
+    private:
         //Funções auxiliares
         string dataTimestamp(); //Retorna um timestamp no formato necessário
         vector<string> separaStringPorEspaco(string &);

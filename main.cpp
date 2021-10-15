@@ -104,16 +104,3 @@ int main ()
 
     return 0;
 }
-
-/*TO DO
-Primários:
-    -Trocar Vagas por Inscrições/Vagas 1/1 (transmormar em dinâmico)
-    -Mensagem de confirmação (cancelarInscrições)
-Secundários:
-    -nao permitir se inscrever em turmas nao disponíveis (Por pŕe-requisitos e por vagas)
-    -Tratar erros
-    -(?)Abrir e Fechar conexão com o BD no construtor e destrutor
-    -(buscas nao encontradas)
-Revisar:
-    -Query printGrade() (muito grande)
-*/
