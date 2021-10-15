@@ -45,7 +45,7 @@ int Gerenciamento::printGrade()
 
         //Print CABEÇALHO (Nome do Curso)
         int larguraMaxima = 50;
-        int laterais = larguraMaxima - (int)nomeDoCurso.size();
+        int laterais = larguraMaxima - nomeDoCurso.size();
         
         cout << "+--------------------------------------------------------------------------+\n";
         if (laterais % 2 == 0)//Caso Par, divisão é igual
@@ -88,11 +88,10 @@ int Gerenciamento::printGrade()
             cout << "+--------+------------------------------------------------+----------------+\n";
         };
         cout << endl;
-    
     }
-    catch (std::exception const &e)
+    catch (exception const &e)
     {
-        std::cerr << e.what() << std::endl;
+        cerr << e.what() << std::endl;
         return 1;
     }
     return 0;
@@ -120,64 +119,70 @@ int Gerenciamento::printGrade()
 
 int Gerenciamento::printTurmasDisponiveis()
 {
-    //Abre Conexão com o BD
-    Postgres postgres;
-    pqxx::connection con(postgres.getConnection_str().c_str());
-    pqxx::work wrk(con);
-    
-    //Realiza requirementos ao BD
-    pqxx::result turmas = selectTurmasDisponiveis(wrk);
-    
-    //Fecha conxeão com o BD
-    con.disconnect();
-
-    //Começa lógica de Impressão
-    if (turmas.size() < 1)
-    {
-        cout << "Tabela vazia ou erro (turmas)" << endl;
-        return -1;
-    };
-    
-    //CABEÇALHO
-    cout << "+--------------------------------------------------------------------------+\n"
-         << "|                           Turmas Disponíveis                             |\n"
-         << "+--------------------------------------------------------------------------+\n";
-    
-    //PERIODO
-    int row = 0;
-    auto periodoAtual = turmas[0][0].as<int>();//Menor período
-    auto periodoLimite = turmas[turmas.size()-1][0].as<int>();//Maior período
-
-    while (row < turmas.size()-1)
-    {
-        cout << "|" << setw(32) << "" << periodoAtual << "º Período" << setw(32) << "" << "|\n";
-        cout << "+--------+----------------------------------------------------+-------+----+\n";
-        cout << "| Código | Nome                                               | Vagas | ID |\n";
-        cout << "+--------+----------------------------------------------------+-------+----+\n";
+    try{
+        //Abre Conexão com o BD
+        Postgres postgres;
+        pqxx::connection con(postgres.getConnection_str().c_str());
+        pqxx::work wrk(con);
         
-        //DISCIPLINAS
-        while (row < turmas.size() && turmas[row][0].as<int>() == periodoAtual)
+        //Realiza requirementos ao BD
+        pqxx::result turmas = selectTurmasDisponiveis(wrk);
+        
+        //Fecha conxeão com o BD
+        con.disconnect();
+
+        //Começa lógica de Impressão
+        if (turmas.size() < 1)
         {
-            cout << "| "
-                 << turmas[row][1] //Código
-                 << " | "
-                 << turmas[row][2] //Descrição Turma
-                 << setw(50 - turmas[row][2].size()) //Preenche espaço da descrição
-                 << "" << " |   "
-                 << turmas[row][3] //Vagas
-                 << "   | "
-                 << turmas[row][4] //Id
-                 << setw(2- turmas[row][4].size()) //Preenche espaço no caso de números de apenas 1 algarismo
-                 << "" << " | "  << endl;
-            row+=1;
-        }
-        cout << "+--------+----------------------------------------------------+-------+----+\n";
+            cout << "Tabela vazia ou erro (turmas)" << endl;
+            return -1;
+        };
         
-        if (row < turmas.size()-1)
-            periodoAtual = turmas[row][0].as<int>();
+        //CABEÇALHO
+        cout << "+--------------------------------------------------------------------------+\n"
+            << "|                           Turmas Disponíveis                             |\n"
+            << "+--------------------------------------------------------------------------+\n";
         
-    };
-    cout << endl;
+        //PERIODO
+        int row = 0;
+        auto periodoAtual = turmas[0][0].as<int>();//Menor período
+        auto periodoLimite = turmas[turmas.size()-1][0].as<int>();//Maior período
+
+        while (row < turmas.size()-1)
+        {
+            cout << "|" << setw(32) << "" << periodoAtual << "º Período" << setw(32) << "" << "|\n";
+            cout << "+--------+----------------------------------------------------+-------+----+\n";
+            cout << "| Código | Nome                                               | Vagas | ID |\n";
+            cout << "+--------+----------------------------------------------------+-------+----+\n";
+            
+            //DISCIPLINAS
+            while (row < turmas.size() && turmas[row][0].as<int>() == periodoAtual)
+            {
+                cout << "| "
+                    << turmas[row][1] //Código
+                    << " | "
+                    << turmas[row][2] //Descrição Turma
+                    << setw(50 - turmas[row][2].size()) //Preenche espaço da descrição
+                    << "" << " |   "
+                    << turmas[row][3] //Vagas
+                    << "   | "
+                    << turmas[row][4] //Id
+                    << setw(2- turmas[row][4].size()) //Preenche espaço no caso de números de apenas 1 algarismo
+                    << "" << " | "  << endl;
+                row+=1;
+            }
+            cout << "+--------+----------------------------------------------------+-------+----+\n";
+            
+            if (row < turmas.size()-1)
+                periodoAtual = turmas[row][0].as<int>();
+        };
+        cout << endl;
+    }
+    catch (exception const &e)
+    {
+        cerr << e.what() << std::endl;
+        return 1;
+    }
 
    return 0;
    
@@ -189,41 +194,243 @@ int Gerenciamento::printTurmasDisponiveis()
     +--------+----------------------------------------------------+-------+----+
     | Código | Turma                                              | Vagas | ID |
     +--------+----------------------------------------------------+-------+----+
-    | MAC238 | Cálculo III - A                                    |   1   | 1  |
-    | MAC238 | Cálculo III - B                                    |   2   | 1  |
+    | MAC238 | Cálculo III - A                                    |  3/1  | 1  |
+    | MAC238 | Cálculo III - B                                    |  2/1  | 1  |
     +--------|----------------------------------------------------+-------+----+
     |                                2º Período                                |
     +--------+----------------------------------------------------+-------+----+
     | Código | Turma                                              | Vagas | ID |
     +--------+----------------------------------------------------+-------+----+
-    | MAC238 | Cálculo III - A                                    |   4   | 1  |
-    | MAC238 | Cálculo III - B                                    |   5   | 1  |
+    | MAC238 | Cálculo III - A                                    |  0/4  | 1  |
+    | MAC238 | Cálculo III - B                                    |  5/9  | 1  |
     +--------|----------------------------------------------------+-------+----+
     */
 }
 
 int Gerenciamento::fazerInscricoes(string turmas_id)
 {
-    //Trata turmas_id vazio
-    if (turmas_id.size() < 1)
+    try
     {
-        cout << "Nenhuma turma foi selecionada" << endl;
+        //Trata turmas_id vazio
+        if (turmas_id.size() < 1)
+        {
+            cout << "Nenhuma turma foi selecionada" << endl;
+            
+            return 1;
+        }
+
+        //Abre conexão com o Banco de dados
+        Postgres postgres;
+        pqxx::connection con(postgres.getConnection_str().c_str());
+        pqxx::work wrk(con);
         
-        return 1;
+        //Requere turmas disponíveis
+        pqxx::result turmas = selectTurmasDisponiveis(wrk);
+
+        //Fecha Conxeão com o BD
+        con.disconnect();
+
+        //Define timestamp
+        string timestamp = dataTimestamp();
+        
+        //Transforma string turmas_id em um vetor de strings ID
+        vector<string> vetorIDs = separaStringPorEspaco(turmas_id);
+        
+        //Valida IDs
+        vector<string> vetorIDsValidados;
+        for (int i = 0; i < vetorIDs.size(); i++)
+        {
+            if (!validaIDsNaTabela(turmas, 4, vetorIDs.at(i)))
+            {
+                cout << "ERRO: O ID '" << vetorIDs.at(i)
+                     << "' é inválido ou você não tem os requisitos necessários para se inscrever nessa turma"
+                     << endl;
+            }
+            else
+                vetorIDsValidados.push_back(vetorIDs.at(i));
+        }
+        
+        //Finaliza tentativa caso nenhum ID tenha sido validado
+        if (vetorIDsValidados.size() == 0)
+        {
+            //Fecha conexão
+            con.disconnect();
+            return 0;
+        }
+
+        //Monta VALUES
+        string values = "";
+        for (int i = 0; i < vetorIDsValidados.size()-1; i++)
+            values += "(" + getId() + ", '" + vetorIDsValidados.at(i) + "', '" + timestamp + "'), ";
+        values += "(" + getId() + ", '" + vetorIDsValidados.at(vetorIDsValidados.size()-1) + "', '" + timestamp + "')";
+
+        //Realiza o INSERT
+        insertInscricoes(wrk, values);
+
+        //Salva Alterações
+        wrk.commit();
+
+        //Fecha conexão
+        con.disconnect();
+    }
+    catch(const exception& e)
+    {
+        cerr << e.what() << '\n';
+    }
+    
+    return 0;
+}
+
+int Gerenciamento::printInscricoes()
+{
+    try
+    {
+        //Abre conexão com o Banco de dados
+        Postgres postgres;
+        pqxx::connection con(postgres.getConnection_str().c_str());
+        pqxx::work wrk(con);
+
+        //Realiza Requisição ao BD
+        pqxx::result inscricoes = selectInscricoes(wrk);
+
+        //Trata Resposta vazia
+        if (inscricoes.size() < 1)
+        {
+            cout << "Nenhuma inscrição foi encontrada" << endl;
+            return -1;
+        };
+        
+        //Realiza Requisição ao BD
+        pqxx::result periodos = selectPeriodosDasInscricoes(wrk);
+
+        //Trata Resposta vazia
+        if (periodos.size() < 1)
+        {
+            cout << "Tabela vazia ou erro (periodos)" << endl;
+            return -1;
+        };
+        
+        //Fecha conexão com BD
+        con.disconnect();
+        
+        //CABEÇALHO
+        cout << "+--------------------------------------------------------------------------+\n"
+            << "|                               Inscrições                                 |\n"
+            << "+--------------------------------------------------------------------------+\n";
+        
+        //PERIODO
+        int row = 0;
+        //cout << periodos.size() << endl;
+        
+        for (int p = 0; p < (int)periodos.size(); p++)
+        {
+            cout << "|" << setw(32) << "" << periodos[p][0] << "º Período" << setw(32) << "" << "|\n";
+            cout << "+--------+----------------------------------------------------+-------+----+\n";
+            cout << "| Código | Nome                                               | Vagas | ID |\n";
+            cout << "+--------+----------------------------------------------------+-------+----+\n";
+            
+            //DISCIPLINAS
+            while (inscricoes[row][5] == periodos[p][0])
+            {
+                cout << "| "
+                     << inscricoes[row][0] //Código
+                     << " | "
+                     << inscricoes[row][1] //Descrição
+                     << setw(50 - inscricoes[row][1].size()) //Espaçamento descrição
+                     << "" << " |  "
+                     << inscricoes[row][2] //Numero de inscrições na turma
+                     << "/"
+                     << inscricoes[row][3] //Vagas
+                     << "  | "
+                     << inscricoes[row][4] //ID
+                     << setw(2- inscricoes[row][4].size())
+                     << "" << " | "  << endl;
+                row+=1;
+            }
+            cout << "+--------+----------------------------------------------------+-------+----+\n";
+        };
+    }
+    catch(const exception& e)
+    {
+        cerr << e.what() << '\n';
     }
 
-    //Abre conexão com o Banco de dados
-    Postgres postgres;
-    pqxx::connection con(postgres.getConnection_str().c_str());
-    pqxx::work wrk(con);
-    
-    //Requere turmas disponíveis
-    pqxx::result turmas = selectTurmasDisponiveis(wrk);
+    return 0;
+}
 
-    //Fecha Conxeão com o BD
-    con.disconnect();
+int Gerenciamento::cancelarInscricoes(string turma_ids)
+{
+    try
+    {
+        //Retorna caso o vetor de turmas esteja vazio
+        if (turma_ids.size() < 1)
+        {
+            cout << "Nenhuma turma foi selecionada" << endl;
+            return 1;
+        }
+        
+        //Abre conexão com o Banco de dados
+        Postgres postgres;
+        pqxx::connection con(postgres.getConnection_str().c_str());
+        pqxx::work wrk(con);
 
-    //Define timestamp 19:79:55
+        //Pede turmas inscritas
+        pqxx::result inscricoes = selectInscricoes(wrk);
+
+        //Transforma string turmas_id em um vetor de strings ID
+        vector<string> vetorIDs = separaStringPorEspaco(turma_ids);
+
+        //Valida IDs
+        vector<string> vetorIDsValidados;
+        for (int i = 0; i < vetorIDs.size(); i++)
+        {
+            if (!validaIDsNaTabela(inscricoes, 1, vetorIDs.at(i)))
+            {
+                cout << "ERRO: O ID '" << vetorIDs.at(i)
+                     << "' é inválido ou você não se inscreveu nessa turma."
+                     << endl;
+            }
+            else
+                vetorIDsValidados.push_back(vetorIDs.at(i));
+        }
+        
+        //Finaliza tentativa caso nenhum ID tenha sido validado
+        if (vetorIDsValidados.size() == 0)
+        {
+            //Fecha conexão
+            con.disconnect();
+            return 0;
+        }
+
+        //Monta condicoes
+        string condicoes = "";
+        for (int i = 0; i < vetorIDs.size()-1; i++)
+            condicoes += vetorIDs.at(i) + ", ";
+        condicoes += vetorIDs.at(vetorIDs.size()-1);
+        
+        //Realiza DELETE
+        pqxx::result cancelar = wrk.exec(
+            "DELETE FROM inscricoes\
+            WHERE aluno_id = " + getId() +
+                "AND turma_id IN (" + condicoes + ");"
+        );
+
+        //Salva alterações no Banco de Dados
+        wrk.commit();
+
+        //Fecha Conexão com o Banco de dados
+        con.disconnect();
+    }
+    catch(const exception& e)
+    {
+        cerr << e.what() << '\n';
+    }
+
+    return 0;
+}
+
+string Gerenciamento::dataTimestamp()
+{
     time_t now = time(0);
     tm *ltm = localtime(&now);
     string year = to_string(1900 + ltm->tm_year);
@@ -234,142 +441,55 @@ int Gerenciamento::fazerInscricoes(string turmas_id)
     string sec = to_string(ltm->tm_sec);
     string timestamp = year + "-" + month + "-" + day + " " + hour + ":" + min + ":" + sec;
 
-    //cria um VALUE para cada ID enquanto também os valida
-    string values;
-    string word = "";
+    return timestamp;
+}
+
+vector<string> Gerenciamento::separaStringPorEspaco(string &str)
+{
+    string palavra = "";
+    vector<string> vPalavras;
     int i = 0;
+    int j = 0;
 
-    for (auto x : turmas_id)
+    //Varre str caracter por caracter separando as palavras por ' '
+    for (i = 0; i < str.size(); i++)
     {
-        if (x == ' ' || x == '\0')
-        {
-            for (i = 0; i < turmas.size(); i++)
-            {
-                if (to_string(turmas[i][4]) == word)
-                {
-                    values += "(" + getId() + ", '" + word + "', '" + timestamp + "'), ";
-                    break;
-                }
-            }
-            if (i == turmas.size()-1){
-                cout << "Você não tem os pré-requisitos necessários para inscrever-se na Turma "
-                     << turmas[i][2] << "." << endl;
-            }
-            word = "";
-        }
+        if (str[i] != ' ')
+            //Enquanto não encontra ' ', vai formando a string palavra
+            palavra += str[i];
+
         else
-            word += x;
-    }
-    values += "(" + getId() + ", '" + word + "', '" + timestamp + "')"; //ultima palavra
-
-    //Faz INSERT das inscrições tratando repetições
-    insertInscricoes(wrk, values);
-       
-    //Salva alterações no Banco de Dados
-    wrk.commit();
-    //Fecha Conexão com o Banco de dados
-    con.disconnect();
-
-    return 0;
-}
-
-int Gerenciamento::printInscricoes()
-{
-    //Abre conexão com o Banco de dados
-    Postgres postgres;
-    pqxx::connection con(postgres.getConnection_str().c_str());
-    pqxx::work wrk(con);
-
-    //Realiza Requisição ao BD
-    pqxx::result inscricoes = selectInscricoes(wrk);
-
-    //Trata Resposta vazia
-    if (inscricoes.size() < 1)
-    {
-        cout << "Nenhuma inscrição foi encontrada" << endl;
-        return -1;
-    };
-    
-    //Realiza Requisição ao BD
-    pqxx::result periodos = selectPeriodosDasInscricoes(wrk);
-
-    //Trata Resposta vazia
-    if (periodos.size() < 1)
-    {
-        cout << "Tabela vazia ou erro (periodos)" << endl;
-        return -1;
-    };
-    
-    //Fecha conexão com BD
-    con.disconnect();
-    
-    //CABEÇALHO
-    cout << "+--------------------------------------------------------------------------+\n"
-         << "|                               Inscrições                                 |\n"
-         << "+--------------------------------------------------------------------------+\n";
-    
-    //PERIODO
-    int row = 0;
-    //cout << periodos.size() << endl;
-    
-    for (int p = 0; p < (int)periodos.size(); p++)
-    {
-        cout << "|" << setw(32) << "" << periodos[p][0] << "º Período" << setw(32) << "" << "|\n";
-        cout << "+--------+----------------------------------------------------+-------+----+\n";
-        cout << "| Código | Nome                                               | Vagas | ID |\n";
-        cout << "+--------+----------------------------------------------------+-------+----+\n";
+        {
+            //Quando encontra, insere palavra no vetor vPalavras
+            if (palavra != "")//Trata o caso de uma entrada de múltiplos ' ' seguidos
+                vPalavras.push_back(palavra);
         
-        //DISCIPLINAS
-        while (inscricoes[row][4] == periodos[p][0])
-        {
-            cout << "| " << inscricoes[row][0] << " | " << inscricoes[row][1] << setw(50 - inscricoes[row][1].size()) << "" << " |   " << inscricoes[row][2] << "   | " << inscricoes[row][3] << setw(2- inscricoes[row][3].size()) << "" << " | "  << endl;
-            row+=1;
-        }
-        cout << "+--------+----------------------------------------------------+-------+----+\n";
-    };
 
-    return 0;
+            //Reseta palavra
+            palavra = "";
+        }
+    }
+    //Trata a última palavra
+    if (palavra != "")
+        vPalavras.push_back(palavra);
+
+    return vPalavras;
 }
 
-int Gerenciamento::cancelarInscricoes(string turma_ids)
+bool Gerenciamento::validaIDsNaTabela(pqxx::result &tabela, int coluna, string &chave)
 {
-    //Retorna caso o vetor de turmas esteja vazio
-    if (turma_ids.size() < 1)
-    {
-        cout << "Nenhuma turma foi selecionada" << endl;
-        return 1;
-    }
-    
-    //Abre conexão com o Banco de dados
-    Postgres postgres;
-    pqxx::connection con(postgres.getConnection_str().c_str());
-    pqxx::work wrk(con);
+    bool encontrado;
+    int j;
 
-    string turmasCondition = "";
-    string word = "";
-    for (auto x : turma_ids)
+    for (j = 0; j < tabela.size(); j++)
     {
-        if (x == ' ')
+        //Varre tabela disponíveis comparando com o ID word
+        if (to_string(tabela[j][coluna]) == chave && chave != "")
         {
-            turmasCondition += word + ", ";
-            word = "";
+           return true;
         }
-        else
-            word += x;
     }
-    turmasCondition += word;//ultima palavra
-    
-    pqxx::result cancelar = wrk.exec(
-        "DELETE FROM inscricoes\
-        WHERE aluno_id = " + getId() +
-            "AND turma_id IN (" + turmasCondition + ");"
-    );
-
-    //Salva alterações no Banco de Dados
-    wrk.commit();
-
-    //Fecha Conexão com o Banco de dados
-    con.disconnect();
-
-    return 0;
+    return false;   
 }
+
+

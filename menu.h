@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <iomanip>
+#include <vector>
+#include <string>
 
 using namespace std;
 
@@ -12,14 +14,16 @@ class Menu
         void printTelaDeLogin();
         void printMenuPrincipal();
         
+        template <typename T>//int ou char
+        void getInputVerboso(T&, int);//Valida input e limpa stream
         template <typename T>
         void getInput(T&, int);
-
-        int getOpcaoMenu();
-        int getOpcaoLogin();
+        
+        int getOpcaoMenu();//Valida e retorna opção do Menu
+        int getOpcaoLogin();//Valida e retorna opção de Login
 
         void pressioneEnterParaContinuar();
-        bool confirma();
+        bool confirma();//Pede [S/N] para continuar
 };
 
 #endif

@@ -102,7 +102,7 @@ pqxx::result Requerimento::selectTurmasDisponiveis(pqxx::work &wrk)
     return turmas;
 }
 
-void Requerimento::insertInscricoes(pqxx::work &wrk, string values)
+void Requerimento::insertInscricoes(pqxx::work &wrk, string &values)
 {
     pqxx::result inscricoes = wrk.exec(
         "INSERT INTO inscricoes\
@@ -117,18 +117,26 @@ void Requerimento::insertInscricoes(pqxx::work &wrk, string values)
 pqxx::result Requerimento::selectInscricoes(pqxx::work &wrk)
 {
     pqxx::result inscricoes = wrk.exec(
-        "SELECT DISTINCT A.disciplina_id, A.descricao, A.vagas, A.id, G.periodo\
+        "SELECT A.disciplina_id, A.descricao, COUNT(A.turma_id) AS num_inscricoes, A.vagas, A.turma_id, A.periodo\
         FROM (\
-            SELECT T.disciplina_id, T.descricao, T.vagas, T.id\
-            FROM inscricoes I\
-            INNER JOIN turmas T\
-            ON I.turma_id = T.id\
-            WHERE I.aluno_id = " + getId() +  
-        ") A\
-        INNER JOIN grades G\
-        ON A.disciplina_id = G.disciplina_id\
-        WHERE G.curso_id = '" + getCursoId() + "'\
-        ORDER BY G.periodo ASC, A.descricao"
+            SELECT DISTINCT A.disciplina_id, A.descricao, A.vagas, A.turma_id, G.periodo\
+            FROM (\
+                SELECT T.disciplina_id, T.descricao, T.vagas, I.turma_id\
+                FROM inscricoes I\
+                INNER JOIN turmas T\
+                ON I.turma_id = T.id\
+                WHERE I.aluno_id = " + getId() + "\
+            ) A\
+            INNER JOIN grades G\
+            ON A.disciplina_id = G.disciplina_id\
+            WHERE G.curso_id = '" + getCursoId() + "'\
+            \
+        ) A\
+        FULL OUTER JOIN inscricoes B\
+        ON A.turma_id = B.turma_id\
+        GROUP BY A.disciplina_id, A.descricao, A.vagas, A.turma_id, A.periodo\
+        ORDER BY A.periodo ASC, A.descricao"
+
     );
 
     return inscricoes;

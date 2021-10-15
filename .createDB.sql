@@ -111,65 +111,65 @@ CREATE TABLE IF NOT EXISTS historico (
 INSERT INTO cursos
     (id, nome)
 VALUES
-    ('EEL', 'Engenharia Eletrônica e de Computação'),
-    ('COS', 'Engenharia de Computação e Informação');
+    ('EEL', 'Engenharia Eletronica e de Computacao'),
+    ('COS', 'Engenharia de Computacao e Informacao');
 
 --Disciplinas
 
 INSERT INTO disciplinas
     (id, nome)
 VALUES
-    --Engenharia Eletrônica e de Computação
-    --1º Período
-    ('EEL170', 'Computação I'),
-    ('FIS111', 'Física Experimental I'),
-    ('FIT112', 'Física I'),
-    ('IQG111', 'Química EE'),
-    ('MAC118', 'Cálculo I'),
+    --Engenharia Eletronica e de Computacao
+    --1º Periodo
+    ('EEL170', 'Computacao I'),
+    ('FIS111', 'Fisica Experimental I'),
+    ('FIT112', 'Fisica I'),
+    ('IQG111', 'Quimica EE'),
+    ('MAC118', 'Calculo I'),
 
-    --2º Período
+    --2º Periodo
     ('EEH210', 'Eng. e Meio Ambiente'),
-    ('EEL270', 'Computação II'),
-    ('EEL280', 'Circuitos Lógicos'),
-    ('FIS121', 'Física Experimental II'),
-    ('FIT122', 'Física II'),
-    ('MAC128', 'Cálculo II'),
-    ('MAE125', 'Álgebra Linear II'),
+    ('EEL270', 'Computacao II'),
+    ('EEL280', 'Circuitos Logicos'),
+    ('FIS121', 'Fisica Experimental II'),
+    ('FIT122', 'Fisica II'),
+    ('MAC128', 'Calculo II'),
+    ('MAE125', 'Algebra Linear II'),
 
-    --3º Período
+    --3º Periodo
     ('EEG105', 'Sistemas Projetivos'),
     ('EEL350', 'Sistemas Lineares I'),
-    ('EEL356', 'Métodos Mat em Eng Eletro'),
-    ('FIM230', 'Física III'),
-    ('FIN231', 'Física Experimental III'),
-    ('MAC238', 'Cálculo III'),
+    ('EEL356', 'Metodos Mat em Eng Eletro'),
+    ('FIM230', 'Fisica III'),
+    ('FIN231', 'Fisica Experimental III'),
+    ('MAC238', 'Calculo III'),
 
-    --4º Período
-    ('EEL315', 'Eletrônica I'),
-    ('EEL420', 'Circuitos Elétricos I'),
+    --4º Periodo
+    ('EEL315', 'Eletronica I'),
+    ('EEL420', 'Circuitos Eletricos I'),
     ('EEL470', 'Algor e Estr de Dados'),
     ('EEL480', 'Sistemas Digitais'),
-    ('FIM240', 'Física IV'),
-    ('FIN241', 'Física Experimental IV'),
+    ('FIM240', 'Fisica IV'),
+    ('FIN241', 'Fisica Experimental IV'),
 
-    --Engenharia de Computação e Informação
-    --1º Período
-    ('COS110', 'Algoritmos e Programação'),
+    --Engenharia de Computacao e Informacao
+    --1º Periodo
+    ('COS110', 'Algoritmos e Programacao'),
     ('COS111', 'Introd Eng Comput e Informacao'),
 
-    --2º Período
-    ('EEL670', 'Linguagens de Programação'),
+    --2º Periodo
+    ('EEL670', 'Linguagens de Programacao'),
 
-    --3º Período
+    --3º Periodo
     ('COS231', 'Estruturas de Dados'),
     ('EEL580', 'Arquitetura de Computadores'),
-    ('EEL881', 'Teoria da Computação'),
+    ('EEL881', 'Teoria da Computacao'),
 
-    --4º Período
+    --4º Periodo
     ('COE241', 'Estatistica e Mod. Probabilist.'),
     ('COS242', 'Teorias dos Grafos'),
     ('COS471', 'Computadores e Sociedade'),
-    ('MAC248', 'Cálculo IV');
+    ('MAC248', 'Calculo IV');
 
 --Semestres
 INSERT INTO semestres
@@ -183,15 +183,15 @@ VALUES
 INSERT INTO grades
     (curso_id, disciplina_id, pre_requisitos, periodo)
 VALUES
-    --Engenharia Eletrônica e de Computação
-    --1º Período
+    --Engenharia Eletronica e de Computacao
+    --1º Periodo
     ('EEL', 'EEL170', NULL, 1),
     ('EEL', 'FIS111', NULL, 1),
     ('EEL', 'FIT112', NULL, 1),
     ('EEL', 'IQG111', NULL, 1),
     ('EEL', 'MAC118', NULL, 1),
 
-	--2º Período
+	--2º Periodo
     ('EEL', 'EEH210', NULL, 2),
     ('EEL', 'EEL270', '{"EEL170"}', 2),
     ('EEL', 'EEL280', NULL, 2),
@@ -200,7 +200,7 @@ VALUES
     ('EEL', 'MAC128', '{"MAC118"}', 2),
     ('EEL', 'MAE125', NULL, 2),
 
-	--3º Período
+	--3º Periodo
     ('EEL', 'EEG105', NULL, 3),
     ('EEL', 'EEL350', '{"MAC128"}', 3),
     ('EEL', 'EEL356', '{"MAC128"}', 3),
@@ -208,7 +208,7 @@ VALUES
     ('EEL', 'FIN231', '{"FIS121"}', 3),
     ('EEL', 'MAC238', '{"MAC128"}', 3),
     
-	--4º Período
+	--4º Periodo
     ('EEL', 'EEL315', NULL, 4),
     ('EEL', 'EEL420', '{"EEL350"}', 4),
     ('EEL', 'EEL470', NULL, 4),
@@ -216,8 +216,8 @@ VALUES
     ('EEL', 'FIM240', '{"FIM230", "MAC238"}', 4),
     ('EEL', 'FIN241', '{"FIM230", "FIN231"}', 4),
 
-	--Engenharia de Computação e Informação
-	--1º Período
+	--Engenharia de Computacao e Informacao
+	--1º Periodo
 	('COS', 'COS110', NULL, 1),
 	('COS', 'COS111', NULL, 1),
     ('COS', 'EEL280', NULL, 1),
@@ -225,7 +225,7 @@ VALUES
     ('COS', 'FIT112', NULL, 1),
     ('COS', 'MAC118', NULL, 1),
 
-	--2º Período
+	--2º Periodo
     ('COS', 'EEL480', '{"EEL280"}', 2),
 	('COS', 'EEL670', NULL, 2),
     ('COS', 'FIS121', '{"FIS111", "FIT112"}', 2),
@@ -233,7 +233,7 @@ VALUES
     ('COS', 'MAC128', '{"MAC118"}', 2),
     ('COS', 'MAE125', NULL, 2),
 
-	--3º Período
+	--3º Periodo
 	('COS', 'COS231', '{"COS110", "MAE125"}', 3),
 	('COS', 'EEL580', NULL, 3),
 	('COS', 'EEL881', NULL, 3),
@@ -241,7 +241,7 @@ VALUES
 	('COS', 'FIN231', '{"FIS121"}', 3),
 	('COS', 'MAC238', '{"MAC128"}', 3),
 
-	--4º Período
+	--4º Periodo
 	('COS', 'COE241', NULL, 4),
 	('COS', 'COS242', '{"COS231"}', 4),
 	('COS', 'COS471', '{"COS111"}', 4),
@@ -255,75 +255,75 @@ VALUES
 INSERT INTO alunos
     (/*id,*/ nome, curso_id)
 VALUES
-    --Eletrônica
+    --Eletronica
     --Em dia com a grade
     ('Alexandre', 'EEL'),--1
     ('Bruno', 'EEL'),--2
     ('Carlos', 'EEL'),--3
     ('Daniel', 'EEL'),--4
 
-    --Grade bagunçada
+    --Grade baguncada
     ('Ernesto', 'EEL'),--5
 
-    --Computação
+    --Computacao
     --Em dia com a grade
     ('Aline', 'COS'),--6
     ('Bianca', 'COS'),--7
     ('Caroline', 'COS'),--8
     ('Daniela', 'COS'),--9
 
-    --Grade bagunçada
+    --Grade baguncada
     ('Eloisa', 'COS');--10
 
 --Turmas
 INSERT INTO turmas
     (disciplina_id, descricao, semestre_id, vagas)
 VALUES
-    --Ciclo Básico
-	--Matemática
-    ('MAC118', 'Cálculo I - A', '2021.1', 1),
-	('MAC118', 'Cálculo I - B', '2021.1', 1),
+    --Ciclo Basico
+	--Matematica
+    ('MAC118', 'Calculo I - A', '2021.1', 1),
+	('MAC118', 'Calculo I - B', '2021.1', 1),
 	
-    ('MAC128', 'Cálculo II - A', '2021.1', 1),
-    ('MAC128', 'Cálculo II - B', '2021.1', 1),
+    ('MAC128', 'Calculo II - A', '2021.1', 1),
+    ('MAC128', 'Calculo II - B', '2021.1', 1),
     
-    ('MAC238', 'Cálculo III - A', '2021.1', 1),
-    ('MAC238', 'Cálculo III - B', '2021.1', 1),
+    ('MAC238', 'Calculo III - A', '2021.1', 1),
+    ('MAC238', 'Calculo III - B', '2021.1', 1),
     
-    ('MAE125', 'Álgebra Linear II - A', '2021.1', 1),
-    ('MAE125', 'Álgebra Linear II - B', '2021.1', 1),
+    ('MAE125', 'Algebra Linear II - A', '2021.1', 1),
+    ('MAE125', 'Algebra Linear II - B', '2021.1', 1),
 
 	('COE241', 'Estatistica e Mod. Probabilist. - A', '2021.1', 1),
 	('COE241', 'Estatistica e Mod. Probabilist. - B', '2021.1', 1),
 
-    --Física
-    ('FIT112', 'Física I - A', '2021.1', 1),
-    ('FIT112', 'Física I - B', '2021.1', 1),
+    --Fisica
+    ('FIT112', 'Fisica I - A', '2021.1', 1),
+    ('FIT112', 'Fisica I - B', '2021.1', 1),
 	
-    ('FIT122', 'Física II - A', '2021.1', 1),
-    ('FIT122', 'Física II - B', '2021.1', 1),
+    ('FIT122', 'Fisica II - A', '2021.1', 1),
+    ('FIT122', 'Fisica II - B', '2021.1', 1),
     
-    ('FIM230', 'Física III - A', '2021.1', 1),
-    ('FIM230', 'Física III - B', '2021.1', 1),
+    ('FIM230', 'Fisica III - A', '2021.1', 1),
+    ('FIM230', 'Fisica III - B', '2021.1', 1),
     
-    ('FIM240', 'Física IV - A', '2021.1', 1),
-    ('FIM240', 'Física IV - B', '2021.1', 1),
+    ('FIM240', 'Fisica IV - A', '2021.1', 1),
+    ('FIM240', 'Fisica IV - B', '2021.1', 1),
 
-    ('FIS111', 'Física Experimental I - A', '2021.1', 1),
-    ('FIS111', 'Física Experimental I - B', '2021.1', 1),
+    ('FIS111', 'Fisica Experimental I - A', '2021.1', 1),
+    ('FIS111', 'Fisica Experimental I - B', '2021.1', 1),
 
-    ('FIS121', 'Física Experimental II - A', '2021.1', 1),
-    ('FIS121', 'Física Experimental II - B', '2021.1', 1),
+    ('FIS121', 'Fisica Experimental II - A', '2021.1', 1),
+    ('FIS121', 'Fisica Experimental II - B', '2021.1', 1),
     
-    ('FIN231', 'Física Experimental III - A', '2021.1', 1),
-    ('FIN231', 'Física Experimental III - B', '2021.1', 1),
+    ('FIN231', 'Fisica Experimental III - A', '2021.1', 1),
+    ('FIN231', 'Fisica Experimental III - B', '2021.1', 1),
     
-    ('FIN241', 'Física Experimental IV - A', '2021.1', 1),
-    ('FIN241', 'Física Experimental IV - B', '2021.1', 1),
+    ('FIN241', 'Fisica Experimental IV - A', '2021.1', 1),
+    ('FIN241', 'Fisica Experimental IV - B', '2021.1', 1),
 
     --Outros
-	('IQG111', 'Química EE - A', '2021.1', 1),
-	('IQG111', 'Química EE - B', '2021.1', 1),
+	('IQG111', 'Quimica EE - A', '2021.1', 1),
+	('IQG111', 'Quimica EE - B', '2021.1', 1),
     
     ('EEH210', 'Eng. e Meio Ambiente - A', '2021.1', 1),
     ('EEH210', 'Eng. e Meio Ambiente - B', '2021.1', 1),
@@ -331,67 +331,67 @@ VALUES
     ('EEG105', 'Sistemas Projetivos - A', '2021.1', 1),
     ('EEG105', 'Sistemas Projetivos - B', '2021.1', 1),
 
-    --Engenharia Eletrônica e de Computação
-	--1º Período
-	('EEL170', 'Computação I', '2021.1', 1),
+    --Engenharia Eletronica e de Computacao
+	--1º Periodo
+	('EEL170', 'Computacao I', '2021.1', 1),
 	
-	--2º Período
-    ('EEL270', 'Computação II', '2021.1', 1),
-    ('EEL280', 'Circuitos Lógicos - Eletrônica', '2021.1', 1),
+	--2º Periodo
+    ('EEL270', 'Computacao II', '2021.1', 1),
+    ('EEL280', 'Circuitos Logicos - Eletronica', '2021.1', 1),
 
-	--3º Período
+	--3º Periodo
     ('EEL350', 'Sistemas Lineares I', '2021.1', 1),
-    ('EEL356', 'Métodos Mat em Eng Eletro', '2021.1', 1),
+    ('EEL356', 'Metodos Mat em Eng Eletro', '2021.1', 1),
     
-	--4º Período
-    ('EEL315', 'Eletrônica I', '2021.1', 1),
-    ('EEL420', 'Circuitos Elétricos I', '2021.1', 1),
+	--4º Periodo
+    ('EEL315', 'Eletronica I', '2021.1', 1),
+    ('EEL420', 'Circuitos Eletricos I', '2021.1', 1),
     ('EEL470', 'Algor e Estr de Dados', '2021.1', 1),
-    ('EEL480', 'Sistemas Digitais - Eletrônica', '2021.1', 1),
+    ('EEL480', 'Sistemas Digitais - Eletronica', '2021.1', 1),
 
-	--Engenharia de Computação e Informação
-	--1º Período
-	('COS110', 'Algoritmos e Programação', '2021.1', 1),
-	('COS111', 'Introd Eng Comput e Informação', '2021.1', 1),
-    ('EEL280', 'Circuitos Lógicos - Computação', '2021.1', 1),
+	--Engenharia de Computacao e Informacao
+	--1º Periodo
+	('COS110', 'Algoritmos e Programacao', '2021.1', 1),
+	('COS111', 'Introd Eng Comput e Informacao', '2021.1', 1),
+    ('EEL280', 'Circuitos Logicos - Computacao', '2021.1', 1),
 
-	--2º Período
-    ('EEL480', 'Sistemas Digitais - Computação', '2021.1', 1),
-	('EEL670', 'Linguagens de Programação - Computação', '2021.1', 1),
+	--2º Periodo
+    ('EEL480', 'Sistemas Digitais - Computacao', '2021.1', 1),
+	('EEL670', 'Linguagens de Programacao - Computacao', '2021.1', 1),
 
-	--3º Período
+	--3º Periodo
 	('COS231', 'Estruturas de Dados', '2021.1', 1),
-	('EEL580', 'Arquitetura de Computadores - Computação', '2021.1', 1),
-	('EEL881', 'Teoria da Computação - Computação', '2021.1', 1),
+	('EEL580', 'Arquitetura de Computadores - Computacao', '2021.1', 1),
+	('EEL881', 'Teoria da Computacao - Computacao', '2021.1', 1),
 
-	--4º Período
-	('COS242', 'Teorias dos Grafos - Computação', '2021.1', 1),
+	--4º Periodo
+	('COS242', 'Teorias dos Grafos - Computacao', '2021.1', 1),
 	('COS471', 'Computadores e Sociedade', '2021.1', 1);
 
 --Historico
 INSERT INTO historico
     (/*id,*/ aluno_id, disciplina_id)
 VALUES
-    --Eletrônica
-    --1 (1º Período)
+    --Eletronica
+    --1 (1º Periodo)
 
-    --2 (2º Período)
-    --1º Período
+    --2 (2º Periodo)
+    --1º Periodo
     (2, 'EEL170'),
     (2, 'FIS111'),
     (2, 'FIT112'),
     (2, 'IQG111'),
     (2, 'MAC118'),
 
-    --3 (3º Período)
-    --1º Período
+    --3 (3º Periodo)
+    --1º Periodo
     (3, 'EEL170'),
     (3, 'FIS111'),
     (3, 'FIT112'),
     (3, 'IQG111'),
     (3, 'MAC118'),
 
-    --2º Período
+    --2º Periodo
     (3, 'EEH210'),
     (3, 'EEL270'),
     (3, 'EEL280'),
@@ -400,15 +400,15 @@ VALUES
     (3, 'MAC128'),
     (3, 'MAE125'),
 
-    --4 (4º Período)
-    --1º Período
+    --4 (4º Periodo)
+    --1º Periodo
     (4, 'EEL170'),
     (4, 'FIS111'),
     (4, 'FIT112'),
     (4, 'IQG111'),
     (4, 'MAC118'),
 
-    --2º Período
+    --2º Periodo
     (4, 'EEH210'),
     (4, 'EEL270'),
     (4, 'EEL280'),
@@ -417,7 +417,7 @@ VALUES
     (4, 'MAC128'),
     (4, 'MAE125'),
 
-    --3º Período
+    --3º Periodo
     (4, 'EEG105'),
     (4, 'EEL350'),
     (4, 'EEL356'),
@@ -425,36 +425,36 @@ VALUES
     (4, 'FIN231'),
     (4, 'MAC238'),
 
-    --5 (4º Período mas possui buracos no histórico bem como disciplinas adiantadas)
-    --1º Período
+    --5 (4º Periodo mas possui buracos no historico bem como disciplinas adiantadas)
+    --1º Periodo
     (5, 'EEL170'),
     (5, 'FIS111'),
     (5, 'FIT112'),
     (5, 'MAC118'),
 
-    --2º Período
+    --2º Periodo
     (5, 'EEH210'),
     (5, 'EEL270'),
     (5, 'FIS121'),
     (5, 'MAC128'),
     (5, 'MAE125'),
 
-    --3º Período
+    --3º Periodo
     (5, 'EEG105'),
     (5, 'EEL350'),
     (5, 'EEL356'),
     (5, 'FIN231'),
     (5, 'MAC238'),
 
-    --4º Período
+    --4º Periodo
     (5, 'EEL315'),
     (5, 'EEL470'),
 
-    --Computação
-    --6 (1º Período)
+    --Computacao
+    --6 (1º Periodo)
 
-    --7 (2º Período)
-    --1º Período
+    --7 (2º Periodo)
+    --1º Periodo
     (7, 'COS110'),
     (7, 'COS111'),
     (7, 'EEL280'),
@@ -462,8 +462,8 @@ VALUES
     (7, 'FIT112'),
     (7, 'MAC118'),
 
-    --8 (3º Período)
-    --1º Período
+    --8 (3º Periodo)
+    --1º Periodo
     (8, 'COS110'),
     (8, 'COS111'),
     (8, 'EEL280'),
@@ -471,7 +471,7 @@ VALUES
     (8, 'FIT112'),
     (8, 'MAC118'),
 
-    --2º Período
+    --2º Periodo
     (8, 'EEL480'),
     (8, 'EEL670'),
     (8, 'FIS121'),
@@ -479,8 +479,8 @@ VALUES
     (8, 'MAC128'),
     (8, 'MAE125'),
 
-    --9 (4º Período)
-    --1º Período
+    --9 (4º Periodo)
+    --1º Periodo
     (9, 'COS110'),
     (9, 'COS111'),
     (9, 'EEL280'),
@@ -488,7 +488,7 @@ VALUES
     (9, 'FIT112'),
     (9, 'MAC118'),
 
-    --2º Período
+    --2º Periodo
     (9, 'EEL480'),
     (9, 'EEL670'),
     (9, 'FIS121'),
@@ -496,7 +496,7 @@ VALUES
     (9, 'MAC128'),
     (9, 'MAE125'),
 
-    --3º Período
+    --3º Periodo
     (9, 'COS231'),
     (9, 'EEL580'),
     (9, 'EEL881'),
@@ -504,8 +504,8 @@ VALUES
     (9, 'FIN231'),
     (9, 'MAC238'),
 
-    --10 (4º Período mas possui buracos no histórico bem como disciplinas adiantadas)
-    --1º Período
+    --10 (4º Periodo mas possui buracos no historico bem como disciplinas adiantadas)
+    --1º Periodo
     (10, 'COS110'),
     (10, 'COS111'),
     (10, 'EEL280'),
@@ -513,20 +513,20 @@ VALUES
     (10, 'FIT112'),
     (10, 'MAC118'),
 
-    --2º Período
+    --2º Periodo
     (10, 'EEL480'),
     (10, 'FIS121'),
     (10, 'FIT122'),
     (10, 'MAC128'),
     (10, 'MAE125'),
 
-    --3º Período
+    --3º Periodo
     (10, 'COS231'),
     (10, 'EEL580'),
     (10, 'EEL881'),
     (10, 'FIN231'),
     (10, 'MAC238'),
 
-    --4º Período
+    --4º Periodo
     (10, 'COE241'),
     (10, 'IQG111');

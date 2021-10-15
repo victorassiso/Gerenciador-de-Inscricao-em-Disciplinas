@@ -13,7 +13,7 @@ class Requerimento: public Aluno
         pqxx::result selectGrade(pqxx::work &);
         pqxx::result selectPeriodosDoCurso(pqxx::work &);
         pqxx::result selectTurmasDisponiveis(pqxx::work &);
-        void insertInscricoes(pqxx::work &, string);
+        void insertInscricoes(pqxx::work &, string &);
         pqxx::result selectInscricoes(pqxx::work &);
         pqxx::result selectPeriodosDasInscricoes(pqxx::work &);
     

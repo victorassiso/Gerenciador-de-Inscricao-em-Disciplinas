@@ -14,6 +14,11 @@ class Gerenciamento: public Requerimento
         int fazerInscricoes(string);
         int printInscricoes();
         int cancelarInscricoes(string);
+
+        //Funções auxiliares
+        string dataTimestamp(); //Retorna um timestamp no formato necessário
+        vector<string> separaStringPorEspaco(string &);
+        bool validaIDsNaTabela(pqxx::result &, int, string &);
 };
 
 #endif
