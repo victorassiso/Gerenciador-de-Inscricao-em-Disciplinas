@@ -281,92 +281,92 @@ INSERT INTO turmas
 VALUES
     --Ciclo Basico
 	--Matematica
-    ('MAC118', 'Calculo I - A', '2021.1', 1),
-	('MAC118', 'Calculo I - B', '2021.1', 1),
+    ('MAC118', 'Calculo I - A', '2021.1', 5),
+	('MAC118', 'Calculo I - B', '2021.1', 5),
 	
-    ('MAC128', 'Calculo II - A', '2021.1', 1),
-    ('MAC128', 'Calculo II - B', '2021.1', 1),
+    ('MAC128', 'Calculo II - A', '2021.1', 5),
+    ('MAC128', 'Calculo II - B', '2021.1', 5),
     
-    ('MAC238', 'Calculo III - A', '2021.1', 1),
-    ('MAC238', 'Calculo III - B', '2021.1', 1),
+    ('MAC238', 'Calculo III - A', '2021.1', 5),
+    ('MAC238', 'Calculo III - B', '2021.1', 5),
     
-    ('MAE125', 'Algebra Linear II - A', '2021.1', 1),
-    ('MAE125', 'Algebra Linear II - B', '2021.1', 1),
+    ('MAE125', 'Algebra Linear II - A', '2021.1', 5),
+    ('MAE125', 'Algebra Linear II - B', '2021.1', 5),
 
-	('COE241', 'Estatistica e Mod. Probabilist. - A', '2021.1', 1),
-	('COE241', 'Estatistica e Mod. Probabilist. - B', '2021.1', 1),
+	('COE241', 'Estatistica e Mod. Probabilist. - A', '2021.1', 5),
+	('COE241', 'Estatistica e Mod. Probabilist. - B', '2021.1', 5),
 
     --Fisica
-    ('FIT112', 'Fisica I - A', '2021.1', 1),
-    ('FIT112', 'Fisica I - B', '2021.1', 1),
+    ('FIT112', 'Fisica I - A', '2021.1', 5),
+    ('FIT112', 'Fisica I - B', '2021.1', 5),
 	
-    ('FIT122', 'Fisica II - A', '2021.1', 1),
-    ('FIT122', 'Fisica II - B', '2021.1', 1),
+    ('FIT122', 'Fisica II - A', '2021.1', 5),
+    ('FIT122', 'Fisica II - B', '2021.1', 5),
     
-    ('FIM230', 'Fisica III - A', '2021.1', 1),
-    ('FIM230', 'Fisica III - B', '2021.1', 1),
+    ('FIM230', 'Fisica III - A', '2021.1', 5),
+    ('FIM230', 'Fisica III - B', '2021.1', 5),
     
-    ('FIM240', 'Fisica IV - A', '2021.1', 1),
-    ('FIM240', 'Fisica IV - B', '2021.1', 1),
+    ('FIM240', 'Fisica IV - A', '2021.1', 5),
+    ('FIM240', 'Fisica IV - B', '2021.1', 5),
 
-    ('FIS111', 'Fisica Experimental I - A', '2021.1', 1),
-    ('FIS111', 'Fisica Experimental I - B', '2021.1', 1),
+    ('FIS111', 'Fisica Experimental I - A', '2021.1', 5),
+    ('FIS111', 'Fisica Experimental I - B', '2021.1', 5),
 
-    ('FIS121', 'Fisica Experimental II - A', '2021.1', 1),
-    ('FIS121', 'Fisica Experimental II - B', '2021.1', 1),
+    ('FIS121', 'Fisica Experimental II - A', '2021.1', 5),
+    ('FIS121', 'Fisica Experimental II - B', '2021.1', 5),
     
-    ('FIN231', 'Fisica Experimental III - A', '2021.1', 1),
-    ('FIN231', 'Fisica Experimental III - B', '2021.1', 1),
+    ('FIN231', 'Fisica Experimental III - A', '2021.1', 5),
+    ('FIN231', 'Fisica Experimental III - B', '2021.1', 5),
     
-    ('FIN241', 'Fisica Experimental IV - A', '2021.1', 1),
-    ('FIN241', 'Fisica Experimental IV - B', '2021.1', 1),
+    ('FIN241', 'Fisica Experimental IV - A', '2021.1', 5),
+    ('FIN241', 'Fisica Experimental IV - B', '2021.1', 5),
 
     --Outros
-	('IQG111', 'Quimica EE - A', '2021.1', 1),
-	('IQG111', 'Quimica EE - B', '2021.1', 1),
+	('IQG111', 'Quimica EE - A', '2021.1', 5),
+	('IQG111', 'Quimica EE - B', '2021.1', 5),
     
-    ('EEH210', 'Eng. e Meio Ambiente - A', '2021.1', 1),
-    ('EEH210', 'Eng. e Meio Ambiente - B', '2021.1', 1),
+    ('EEH210', 'Eng. e Meio Ambiente - A', '2021.1', 5),
+    ('EEH210', 'Eng. e Meio Ambiente - B', '2021.1', 5),
 
-    ('EEG105', 'Sistemas Projetivos - A', '2021.1', 1),
-    ('EEG105', 'Sistemas Projetivos - B', '2021.1', 1),
+    ('EEG105', 'Sistemas Projetivos - A', '2021.1', 5),
+    ('EEG105', 'Sistemas Projetivos - B', '2021.1', 5),
 
     --Engenharia Eletronica e de Computacao
 	--1º Periodo
-	('EEL170', 'Computacao I', '2021.1', 1),
+	('EEL170', 'Computacao I', '2021.1', 5),
 	
 	--2º Periodo
-    ('EEL270', 'Computacao II', '2021.1', 1),
-    ('EEL280', 'Circuitos Logicos - Eletronica', '2021.1', 1),
+    ('EEL270', 'Computacao II', '2021.1', 5),
+    ('EEL280', 'Circuitos Logicos - Eletronica', '2021.1', 5),
 
 	--3º Periodo
-    ('EEL350', 'Sistemas Lineares I', '2021.1', 1),
-    ('EEL356', 'Metodos Mat em Eng Eletro', '2021.1', 1),
+    ('EEL350', 'Sistemas Lineares I', '2021.1', 5),
+    ('EEL356', 'Metodos Mat em Eng Eletro', '2021.1', 5),
     
 	--4º Periodo
-    ('EEL315', 'Eletronica I', '2021.1', 1),
-    ('EEL420', 'Circuitos Eletricos I', '2021.1', 1),
-    ('EEL470', 'Algor e Estr de Dados', '2021.1', 1),
-    ('EEL480', 'Sistemas Digitais - Eletronica', '2021.1', 1),
+    ('EEL315', 'Eletronica I', '2021.1', 5),
+    ('EEL420', 'Circuitos Eletricos I', '2021.1', 5),
+    ('EEL470', 'Algor e Estr de Dados', '2021.1', 5),
+    ('EEL480', 'Sistemas Digitais - Eletronica', '2021.1', 5),
 
 	--Engenharia de Computacao e Informacao
 	--1º Periodo
-	('COS110', 'Algoritmos e Programacao', '2021.1', 1),
-	('COS111', 'Introd Eng Comput e Informacao', '2021.1', 1),
-    ('EEL280', 'Circuitos Logicos - Computacao', '2021.1', 1),
+	('COS110', 'Algoritmos e Programacao', '2021.1', 5),
+	('COS111', 'Introd Eng Comput e Informacao', '2021.1', 5),
+    ('EEL280', 'Circuitos Logicos - Computacao', '2021.1', 5),
 
 	--2º Periodo
-    ('EEL480', 'Sistemas Digitais - Computacao', '2021.1', 1),
-	('EEL670', 'Linguagens de Programacao - Computacao', '2021.1', 1),
+    ('EEL480', 'Sistemas Digitais - Computacao', '2021.1', 5),
+	('EEL670', 'Linguagens de Programacao - Computacao', '2021.1', 5),
 
 	--3º Periodo
-	('COS231', 'Estruturas de Dados', '2021.1', 1),
-	('EEL580', 'Arquitetura de Computadores - Computacao', '2021.1', 1),
-	('EEL881', 'Teoria da Computacao - Computacao', '2021.1', 1),
+	('COS231', 'Estruturas de Dados', '2021.1', 5),
+	('EEL580', 'Arquitetura de Computadores - Computacao', '2021.1', 5),
+	('EEL881', 'Teoria da Computacao - Computacao', '2021.1', 5),
 
 	--4º Periodo
-	('COS242', 'Teorias dos Grafos - Computacao', '2021.1', 1),
-	('COS471', 'Computadores e Sociedade', '2021.1', 1);
+	('COS242', 'Teorias dos Grafos - Computacao', '2021.1', 5),
+	('COS471', 'Computadores e Sociedade', '2021.1', 5);
 
 --Historico
 INSERT INTO historico

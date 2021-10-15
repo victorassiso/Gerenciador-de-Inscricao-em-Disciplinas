@@ -163,11 +163,13 @@ int Gerenciamento::printTurmasDisponiveis()
                     << " | "
                     << turmas[row][2] //Descrição Turma
                     << setw(50 - turmas[row][2].size()) //Preenche espaço da descrição
-                    << "" << " |   "
-                    << turmas[row][3] //Vagas
-                    << "   | "
-                    << turmas[row][4] //Id
-                    << setw(2- turmas[row][4].size()) //Preenche espaço no caso de números de apenas 1 algarismo
+                    << "" << " |  "
+                    << turmas[row][3] //Num de Inscricoes
+                    << "/"
+                    << turmas[row][4] //Vagas
+                    << "  | "
+                    << turmas[row][5] //Id
+                    << setw(2- turmas[row][5].size()) //Preenche espaço no caso de números de apenas 1 algarismo
                     << "" << " | "  << endl;
                 row+=1;
             }

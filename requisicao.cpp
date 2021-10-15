@@ -49,7 +49,7 @@ pqxx::result Requerimento::selectPeriodosDoCurso(pqxx::work &wrk)
 pqxx::result Requerimento::selectTurmasDisponiveis(pqxx::work &wrk)
 {
     pqxx::result turmas = wrk.exec(
-        "WITH\
+         "WITH\
         gradeDoCurso AS\
         (\
             SELECT disciplina_id, pre_requisitos[1] AS p1, pre_requisitos[2] AS p2, periodo\
@@ -91,12 +91,21 @@ pqxx::result Requerimento::selectTurmasDisponiveis(pqxx::work &wrk)
                 (B.disciplina_id IS NOT NULL OR A.p2 IS NULL)\
             AND\
                 A.disciplina_id IS NOT NULL\
+        ),\
+        turmasDisponiveis AS\
+        (\
+            SELECT A.periodo, A.disciplina_id, B.descricao, B.vagas, B.id\
+            FROM gradeMenosHistoricoMenosP2 A\
+            INNER JOIN turmas B\
+            ON A.disciplina_id = B.disciplina_id\
         )\
-        SELECT A.periodo, A.disciplina_id, B.descricao, B.vagas, B.id\
-        FROM gradeMenosHistoricoMenosP2 A\
-        INNER JOIN turmas B\
-        ON A.disciplina_id = B.disciplina_id\
-        ORDER BY A.periodo ASC, B.descricao"
+            SELECT A.periodo, A.disciplina_id, A.descricao, COUNT(B.turma_id) AS num_inscricoes, A.vagas, A.id\
+            FROM turmasDisponiveis A\
+            FULL OUTER JOIN inscricoes B\
+            ON A.id = B.turma_id\
+            WHERE A.disciplina_id IS NOT NULL\
+            GROUP BY A.periodo, A.disciplina_id, A.descricao, A.vagas, A.id, B.turma_id\
+            ORDER BY A.periodo ASC, A.descricao"\
     );
 
     return turmas;
